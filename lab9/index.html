@@ -188,9 +188,25 @@
 
     //Interpreta los movimientos en acciones
     function moveRobot(dir) {
-        
+        const newPos = { ...robotPosition };
+        if (dir === 'up') newPos.y -= 1;
+        if (dir === 'down') newPos.y += 1;
+        if (dir === 'left') newPos.x -= 1;
+        if (dir === 'right') newPos.x += 1;
+
+        if (newPos.x < 0 || newPos.x >= map[0].length || newPos.y < 0 || newPos.y >= map.length) return;
+
+        const nextCell = map[newPos.y][newPos.x];
+        handleCell(nextCell, newPos, dir);
     }
 
+    // Ver que hacer con lo que hay en la siguiente casilla
+    function handleCell(cell, newPos, dir) {
+
+
+    }
+
+    
 
 
 </script>
