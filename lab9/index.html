@@ -223,6 +223,15 @@
                 updateRobotPosition(newPos);
                 if (cell === 'F') alert("El robot está durmiendo en sociales");
                 break;
+            case 'S':
+                Suplantacion(newPos,dir)
+                break;
+            case 'C':
+                break;
+            case 'P':
+                break;
+            case 'A':
+                break;
         }
 
     }
@@ -232,6 +241,32 @@
         robotPosition = newPos;
         const newRobotCell = document.querySelector(`#game-board .cell:nth-child(${newPos.y * 11 + newPos.x + 1})`);
         newRobotCell.id = 'robot';
+    }
+
+
+    function Suplantacion(pos, dir) {
+
+        const cell = document.querySelector(`#game-board .cell:nth-child(${pos.y * 11 + pos.x + 1})`);
+        cell.classList.remove('hidden');
+
+        let newPos = { ...pos };
+
+        switch (dir) {
+            case 'up':
+                newPos.y = map.length - 1;
+                break;
+            case 'down':
+                newPos.y = 0;
+                break;
+            case 'left':
+                newPos.x = map[0].length - 1;
+                break;
+            case 'right':
+                newPos.x = 0;
+                break;
+        }
+        
+        updateRobotPosition(newPos);
     }
 
     
