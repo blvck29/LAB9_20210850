@@ -16,16 +16,60 @@
 
         <h1 style="padding-top: 40px;">Robot Fostena Game</h1>
 
-        <button id="subir" class="btn btn-success">Subir Laberinto</button>
+        <div><button id="subir" class="btn btn-success">Subir Laberinto</button></div>
 
-        <textarea id="mapa" placeholder="Ingresa el mapa del juego aquí"></textarea>
-        <br>
+        <div id="uploadArea" style="display: none;">
+            <textarea id="mapa" style="min-width: 400px; min-height: 300px;" placeholder="Ingresa el mapa del juego aquí"></textarea>
         
-        <button id="inicia" class="btn btn-success">Iniciar el Juego</button>
-        <button id="toggle-obstacles" style="display: none;">Mostrar obstáculos</button>
-        <div id="game-board"></div>
+            <br>
+            <button id="inicia" class="btn btn-success">Iniciar el Juego</button>
+
+            <button id="toggle-obstacles" style="display: none;">Mostrar obstáculos</button>
+            
+            <div id="game-board"></div>
+        </div>
     </div>
 
     
+<script>
+
+    document.getElementById('subir').addEventListener('click', uploadMap);
+
+    document.getElementById('inicia').addEventListener('click', startGame);
+
+    document.getElementById('toggle-obstacles').addEventListener('click', toggleObstacles);
+
+
+    // Muestra el campo para subir el Mapa
+    function uploadMap(){
+        const uploadArea = document.getElementById('uploadArea');
+        uploadArea.style.display = 'block';
+    }
+    
+
+    // Inicia el juego
+
+    function startGame() {
+        const mapInput = document.getElementById('mapa').value;
+
+        const [mapData, legendData] = mapInput.split('\n\n');
+
+        map = mapData.split('\n').map(row => row.split(''));
+
+        const legend = legendData.split('\n').reduce((acc, line) => {
+            const [key, value] = line.split(':');
+            acc[key] = value;
+            return acc;
+        }, {});
+
+        renderBoard(legend);
+        document.getElementById('toggle-obstacles').style.display = 'block';
+        document.addEventListener('keydown', handleKeyPress);
+    }
+
+
+
+</script>
+
 
 </body>
