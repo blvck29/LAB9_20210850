@@ -6,7 +6,47 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     <title>STFGAMES - Robot Fostena Game</title>
-
+    <style>
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(11, 50px);
+            grid-template-rows: repeat(11, 50px);
+            gap: 2px;
+            margin-top: 20px;
+        }
+        h1 {
+            font-size: 2.6rem;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #000;
+        }
+        .hidden {
+            background-color: grey;
+        }
+        .yellow {
+            background-color: #FFFF00;
+        }
+        .green {
+            background-color: #008000;
+        }
+        .black {
+            background-color: #000000;
+        }
+        .blue {
+            background-color: #add8e6;
+        }
+        #robot {
+            background-image: url('robot.png') center center no-repeat;
+            background-size: cover;
+        }
+        .monster {
+            background-size: cover;
+        }
+    </style>
 </head>
 
 <body>
@@ -17,6 +57,7 @@
         <h1 style="padding-top: 40px;">Robot Fostena Game</h1>
 
         <div><button id="subir" class="btn btn-success">Subir Laberinto</button></div>
+        <br>
 
         <div id="uploadArea" style="display: none;">
             <textarea id="mapa" style="min-width: 400px; min-height: 300px;" placeholder="Ingresa el mapa del juego aquí"></textarea>
@@ -24,9 +65,11 @@
             <br>
             <button id="inicia" class="btn btn-success">Iniciar el Juego</button>
 
-            <button id="toggle-obstacles" style="display: none;">Mostrar obstáculos</button>
-            
             <div id="game-board"></div>
+
+            <button id="toggle-obstacles" class="btn btn-success" style="display: none;">Mostrar obstáculos</button>
+
+            <div style="padding-bottom: 60px;"></div>
         </div>
     </div>
 
@@ -63,9 +106,66 @@
         }, {});
 
         renderBoard(legend);
-        document.getElementById('toggle-obstacles').style.display = 'block';
+
+        const toggle_button = document.getElementById('toggle-obstacles');
+        toggle_button.style.display = 'block';
+
         document.addEventListener('keydown', handleKeyPress);
     }
+
+    function renderBoard(legend) {
+
+        const board = document.getElementById('game-board');
+
+        board.innerHTML = '';
+
+        for (let y = 0; y < map.length; y++) {
+
+            for (let x = 0; x < map[y].length; x++) {
+                
+                const cell = document.createElement('div');
+
+                cell.classList.add('cell', 'hidden');
+                switch (map[y][x]) {
+
+                    // Punto inicial del recorrido del robot
+                    case 'I':
+                        cell.classList.add('yellow');
+                        robotPosition = { x, y };
+                        cell.id = 'robot';
+                        break;
+
+                    // Punto final del recorrido del robot
+                    case 'F':
+                        cell.classList.add('green');
+                        break;
+
+                    // Ubicación monstruos
+                    case 'S':
+                    case 'C':
+                    case 'P':
+                        cell.classList.add('monster');
+                        cell.style.backgroundImage = `url('${legend[map[y][x]].split(' ')[0]}')`;
+                        break;
+
+                    //  Ubicación de un agujero negro
+                    case 'A':
+                        cell.classList.add('black');
+                        break;
+
+                    // Ubicación de una casilla libre
+                    case 'O':
+                        cell.classList.add('blue');
+                        break;
+                    
+                }
+                board.appendChild(cell);
+            }
+        }
+    }
+
+
+    
 
 
 
