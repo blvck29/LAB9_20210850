@@ -25,7 +25,8 @@
             border: 1px solid #000;
         }
         .hidden {
-            background-color: grey;
+            background-color: #add8e6 !important;
+            background-image: none !important;
         }
         .yellow {
             background-color: #FFFF00;
@@ -39,11 +40,11 @@
         .blue {
             background-color: #add8e6;
         }
-        #robot {
-            background: url('robot.png') center center no-repeat;
+        .monster {
             background-size: cover;
         }
-        .monster {
+        #robot {
+            background: url('robot.png') center center no-repeat;
             background-size: cover;
         }
     </style>
@@ -57,17 +58,17 @@
         <h1 style="padding-top: 40px;">Robot Fostena Game</h1>
 
         <div><button id="subir" class="btn btn-success">Subir Laberinto</button></div>
-        <br>
+        <div style="padding-top: 15px;"></div>
 
         <div id="uploadArea" style="display: none;">
             <textarea id="mapa" style="min-width: 400px; min-height: 300px;" placeholder="Ingresa el mapa del juego aquí"></textarea>
         
-            <br>
+            <div style="padding-top: 15px;"></div>
             <button id="inicia" class="btn btn-success">Iniciar el Juego</button>
 
             <div id="game-board"></div>
 
-            <br>
+            <div style="padding-top: 15px;"></div>
 
             <button id="toggle-obstacles" class="btn btn-success" style="display: none;">Mostrar obstáculos</button>
 
@@ -84,11 +85,26 @@
 
     document.getElementById('toggle-obstacles').addEventListener('click', toggleObstacles);
 
+    let map = [];
+    let robotPosition = { x: 0, y: 0 };
+    let obstaclesVisible = false;
 
     // Muestra el campo para subir el Mapa
     function uploadMap(){
         const uploadArea = document.getElementById('uploadArea');
         uploadArea.style.display = 'block';
+    }
+
+    // Mostrar y Ocultar los obstáculos
+    function toggleObstacles() {
+        obstaclesVisible = !obstaclesVisible;
+
+        document.querySelectorAll('.monster, .black').forEach(cell => {
+            cell.classList.toggle('hidden', !obstaclesVisible);
+        });
+
+        // Actualizar el texto del botón
+        document.getElementById('toggle-obstacles').textContent = obstaclesVisible ? 'Ocultar obstáculos' : 'Mostrar obstáculos';
     }
     
 
@@ -118,18 +134,12 @@
     }
 
     function renderBoard(legend) {
-
         const board = document.getElementById('game-board');
-
         board.innerHTML = '';
-
         for (let y = 0; y < map.length; y++) {
-
             for (let x = 0; x < map[y].length; x++) {
-                
                 const cell = document.createElement('div');
-
-                cell.classList.add('cell', 'hidden');
+                cell.classList.add('cell');
                 switch (map[y][x]) {
 
                     // Punto inicial del recorrido del robot
@@ -149,12 +159,14 @@
                     case 'C':
                     case 'P':
                         cell.classList.add('monster');
+                        cell.classList.add('hidden');
                         cell.style.backgroundImage = `url('${legend[map[y][x]].split(' ')[0]}')`;
                         break;
 
                     //  Ubicación de un agujero negro
                     case 'A':
                         cell.classList.add('black');
+                        cell.classList.add('hidden');
                         break;
 
                     // Ubicación de una casilla libre
