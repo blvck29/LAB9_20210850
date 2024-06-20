@@ -67,6 +67,8 @@
 
             <div id="game-board"></div>
 
+            <br>
+
             <button id="toggle-obstacles" class="btn btn-success" style="display: none;">Mostrar obstáculos</button>
 
             <div style="padding-bottom: 60px;"></div>
@@ -203,7 +205,21 @@
     // Ver que hacer con lo que hay en la siguiente casilla
     function handleCell(cell, newPos, dir) {
 
+        switch (cell) {
+            case 'O':
+            case 'F':
+                updateRobotPosition(newPos);
+                if (cell === 'F') alert("El robot está durmiendo en sociales");
+                break;
+        }
 
+    }
+
+    function updateRobotPosition(newPos) {
+        document.getElementById('robot').id = '';
+        robotPosition = newPos;
+        const newRobotCell = document.querySelector(`#game-board .cell:nth-child(${newPos.y * 11 + newPos.x + 1})`);
+        newRobotCell.id = 'robot';
     }
 
     
