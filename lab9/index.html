@@ -40,7 +40,7 @@
             background-color: #add8e6;
         }
         #robot {
-            background-image: url('robot.png') center center no-repeat;
+            background: url('robot.png') center center no-repeat;
             background-size: cover;
         }
         .monster {
@@ -107,9 +107,11 @@
 
         renderBoard(legend);
 
+        // Mostrar el botón para los obstáculos
         const toggle_button = document.getElementById('toggle-obstacles');
         toggle_button.style.display = 'block';
 
+        // Inicia la función para leer los movimientos del robot
         document.addEventListener('keydown', handleKeyPress);
     }
 
@@ -165,7 +167,23 @@
     }
 
 
-    
+    // Lee el teclado y asigna un movimiento
+    function handleKeyPress(event) {
+        switch (event.key) {
+            case 'ArrowUp':
+                moveRobot('up');
+                break;
+            case 'ArrowDown':
+                moveRobot('down');
+                break;
+            case 'ArrowLeft':
+                moveRobot('left');
+                break;
+            case 'ArrowRight':
+                moveRobot('right');
+                break;
+        }
+    }
 
 
 
